@@ -8,6 +8,7 @@ import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
 import { connectDB } from "./config/db.js";
+import { errorhandler } from "./middleware/errorMiddleware.js";
 
 // CONFIG
 dotenv.config();
@@ -45,14 +46,7 @@ if (process.env.NODE_ENV === "development") {
 }
 
 // ─── Global Error Handler ─────────────────────────────────────────────
-app.use((err, _req, res, _next) => {
-  console.error(`[ERROR] ${err.message}`);
-  res.status(err.statusCode || 500).json({
-    success: false,
-    message: err.message || 'Internal Server Error',
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
-  });
-});
+app.use(errorhandler);
 
 
 // LISTENER
