@@ -90,7 +90,7 @@ productSchema.virtual('discount').get(function() {
 // ─── Auto-slug ────────────────────────────────────────────────────────
 productSchema.pre('save', function(next){
     if (this.isModified('name')) {
-        this.slug = this.name.toLoweCase()
+        this.slug = this.name.toLowerCase()
             .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric chars with hyphens
             .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
     }

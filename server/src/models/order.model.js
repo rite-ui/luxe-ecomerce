@@ -32,7 +32,7 @@ const orderSchema = new mongoose.Schema({
     items: [{ type: orderItemSchema }],
     shippping: shippingSchema,
 
-    paymentMrhod : {type: String, enum: ['stripe', 'razorpay', 'cod'], required: true},
+    paymentMethod : {type: String, enum: ['stripe', 'razorpay', 'cod'], required: true},
     paymentResult: { id: String, status: String, updateAt: String, email: String },
 
     itemsPrice:    { type: Number, required: true, default: 0 },
