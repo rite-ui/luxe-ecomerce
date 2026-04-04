@@ -68,6 +68,17 @@ export const changePassword = asyncHandler(async (req, res) => {
   await user.save();
   sendToken(user, 200, res);
 });
+// POST /api/auth/forgot-password
+export const forgotPassword = asyncHandler(async (req, res) => {
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) { res.status(400); throw new Error('Email not found'); }
+
+    const resetToken = user.getResetPasswordToken();
+    await user.save({ validateBeforeSave: false });
+
+    // In production, send email with resetToken here. For now, return it in response
+    res.json({ success: true, resetToken });
+});
 
 // PUT /api/auth/reset-password/:token
 export const resetPassword = asyncHandler(async (req, res) => {

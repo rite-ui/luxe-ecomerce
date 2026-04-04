@@ -31,7 +31,7 @@ const SORT_MAP ={
 };
 
 // GET /api/products
-const getProducts = asyncHandler(async (req, res) => {
+export const getProducts = asyncHandler(async (req, res) => {
     const page = +req.query.page || 1;
     const limit = +req.query.limit || 12;
     const skip = (page - 1) * limit;
@@ -78,7 +78,7 @@ export const searchProducts = asyncHandler(async (req, res) => {
 });
 
 // GET /api/products/:id
-const getProductById = asyncHandler(async (req, res) => {
+export const getProductById = asyncHandler(async (req, res) => {
     const product = await Product.findOne({
         $or: [
             ...(req.params.id.match(/^[0-9a-fA-F]{24}$/) ? [{ _id: req.params.id }] : []),
