@@ -1,7 +1,7 @@
 // server/src/routes/auth.routes.js
 import {Router} from 'express';
 import {
-    register,login,logout,getMe,updateMe,
+    register,login,logout,getMe,
     changePassword, forgotPassword,resetPassword,toggleWishlist,
 } from '../controllers/authContoller.js';
 import { protect } from '../middleware/authMiddleware.js';
@@ -12,7 +12,7 @@ router.post('/register',    register);
 router.post('/login',       login);
 router.get('/logout',   protect, logout);
 router.get('/me',       protect, getMe);
-router.put('/me',       protect, updateMe);
+// router.put('/me',       protect, updateMe);
 router.put('/change-password', protect, changePassword);
 router.post('/forgot-password', forgotPassword);
 router.put('/reset-password/:token', resetPassword);

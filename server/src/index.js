@@ -5,7 +5,7 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
 import dotenv from "dotenv";
-import path from "path";
+import path  from "path";
 import { fileURLToPath } from "url";
 import { connectDB } from "./config/db.js";
 import { errorhandler } from "./middleware/errorMiddleware.js";
@@ -19,6 +19,16 @@ connectDB();
 // ES module __dirname equivalent
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+
+// Route imports
+import authRoutes from "./routes/auth.routes.js";
+import productRoutes from "./routes/product.routes.js";
+import userRoutes from "./routes/user.js";
+import orderRoutes from "./routes/order.routes.js";
+import paymentRoutes from "./routes/payment.routes.js";
+import reviewRoutes from "./routes/reviews.routes.js";
+import adminRoutes from "./routes/admin.routes.js";
 
 // APP CONFIG
 const app =  express();
@@ -45,8 +55,41 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
+// ─── Static Uploads ──────────────────────────────────────────────────
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// ─── API Routes ───────────────────────────────────────────────────────
+app.use('/api/auth',     authRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/orders',   orderRoutes);
+app.use('/api/users',    userRoutes);
+app.use('/api/payments', paymentRoutes);
+app.use('/api/reviews',  reviewRoutes);
+app.use('/api/admin',    adminRoutes);
+
+// ─── Health Check ─────────────────────────────────────────────────────
+app.get('/api/health', (_req, res) =>
+  res.json({ success: true, message: '🚀 LUXE API running', env: process.env.NODE_ENV })
+);
+
+// ─── Serve React (Production) ─────────────────────────────────────────
+// if (process.env.NODE_ENV === 'production') {
+//   app.use(express.static(join(__dirname, '../client/dist')));
+//   app.get('*', (_req, res) =>
+//     res.sendFile(join(__dirname, '../client/dist/index.html'))
+//   );
+// }
+
 // ─── Global Error Handler ─────────────────────────────────────────────
 app.use(errorhandler);
+
+// ─── 404 ──────────────────────────────────────────────────────────────
+app.use((req, res) => {
+  res.status(404).json({ 
+    success: false, 
+    message: `Route ${req.originalUrl} not found` 
+  });
+});
 
 
 // LISTENER

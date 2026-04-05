@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import 'dotenv/config';
 import asyncHandler from 'express-async-handler';
 import Razorpay from 'razorpay';
 import { protect } from '../middleware/authMiddleware.js';

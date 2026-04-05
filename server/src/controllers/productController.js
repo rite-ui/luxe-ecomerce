@@ -1,5 +1,5 @@
 import asyncHandler from 'express-async-handler';
-import Product from '../models/product.model.js';
+import {Product} from '../models/product.model.js';
 
 // ─── Build filter from query params ───────────────────────────────────
 const buildFilter = (query) => {
@@ -99,7 +99,7 @@ export const getProductById = asyncHandler(async (req, res) => {
 });
 
 // POST /api/products  (admin)
-const createProduct = asyncHandler(async (req, res) => {
+export const createProduct = asyncHandler(async (req, res) => {
     const product = await Product.create(req.body);
     res.status(201).json({ success: true, data: product });
 });

@@ -1,6 +1,6 @@
 import asyncHandler from "express-async-handler";
 import jwt from "jsonwebtoken";
-import { User } from "../models/user.model.js";
+import User from "../models/user.model.js";
 
 // ─── Protect: must be logged in ──────────────────────────────────────
 export const protect = asyncHandler(async (req, res, next) =>{

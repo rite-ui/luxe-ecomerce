@@ -111,7 +111,7 @@ productSchema.methods.updateRating = function() {
 // ─── Indexes ────────────────────────────────────────────────────────── 
 productSchema.index({ name: 'text', description: 'text', tags: 'text' });
 productSchema.index({  category: 1, price: 1 , rating: -1 });
-productSchema.index({isFeatured: 1, isActive})
+productSchema.index({isFeatured: 1, isActive: 1})
 productSchema.index({ slug: 1 }, { unique: true });
 
 export const Product = mongoose.model("Product", productSchema);
