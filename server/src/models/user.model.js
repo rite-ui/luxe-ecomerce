@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
-import jwt from  "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import crypto from "crypto";
 
 const addressSchema = new mongoose.Schema({
@@ -9,11 +9,9 @@ const addressSchema = new mongoose.Schema({
   city:      String,
   state:     String,
   zip:       String,
-  country:   { type: String, default: 'US' },
+  country:   { type: String, default: 'In' },
   isDefault: { type: Boolean, default: false },
 }, { _id: false });
-
-
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -35,11 +33,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, "password is required"],
         minlength: [6, "Password must be at least 6 characters"],
-        select: false, // Exclude password from query results by default
+        select: false, 
     },
     role: {
         type: String,
-        enum: ["user",  "admin"],
+        enum: ["user", "admin"],
         default: "user",
     },
     avatar: {
@@ -47,21 +45,21 @@ const userSchema = new mongoose.Schema({
         url: {type: String, default:""},
     },
     phone:     { type: String, default: '' },
+    lastlogin: { type: Date }, // Added this so controllers can save it
     address:   [addressSchema],
     wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
     resetPasswordToken: String,
     resetPasswordExpire: Date,
 }, { timestamps: true });
 
-// ─── Hash password before save ────────────────────────────────────────
-userSchema.pre("save", async function(next){
-    if (!this.isModified("password")) return next();
-    this.password = await bcrypt.hash(this.password,12);
-    next();
+// ─── Hash password before save (FIXED: Removed next) ──────────────────
+userSchema.pre("save", async function() {
+    if (!this.isModified("password")) return;
+    this.password = await bcrypt.hash(this.password, 12);
 });
 
 // ─── Instance Methods ─────────────────────────────────────────────────
-userSchema.methods.getSignedToken = function(){
+userSchema.methods.getSignedToken = function() {
     return jwt.sign(
         { id: this._id, role: this.role },
         process.env.JWT_SECRET,
@@ -69,18 +67,17 @@ userSchema.methods.getSignedToken = function(){
     );
 };
 
-// ─── Compare password before save ────────────────────────────────────────
-userSchema.methods.comparePassword = async function(candidatePassword){
+userSchema.methods.comparePassword = async function(candidatePassword) {
     return await bcrypt.compare(candidatePassword, this.password);
 };
 
-// ─── Generate and hash password reset token ────────────────────────────────────────
-userSchema.methods.getResetToken = function(){
+// Renamed to getResetPasswordToken to match controller
+userSchema.methods.getResetPasswordToken = function() {
     const token = crypto.randomBytes(32).toString("hex");
     this.resetPasswordToken = crypto.createHash("sha256").update(token).digest("hex");
-    this.resetPasswordExpire = Date.now() + 10 * 60 * 1000; // 10 minutes
+    this.resetPasswordExpire = Date.now() + 10 * 60 * 1000; 
     return token;
 }
-const User = mongoose.model('User', userSchema);
 
+const User = mongoose.model('User', userSchema);
 export default User;

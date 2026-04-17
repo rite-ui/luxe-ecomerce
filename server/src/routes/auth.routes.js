@@ -16,6 +16,6 @@ router.get('/me',       protect, getMe);
 router.put('/change-password', protect, changePassword);
 router.post('/forgot-password', forgotPassword);
 router.put('/reset-password/:token', resetPassword);
-router.put('/wishlist/:productId', toggleWishlist);
+router.put('/wishlist/:productId',protect, toggleWishlist);
 
 export default router;

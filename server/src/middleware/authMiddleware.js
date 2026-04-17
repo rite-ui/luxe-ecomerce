@@ -23,6 +23,7 @@ export const protect = asyncHandler(async (req, res, next) =>{
             res.status(401);
             throw new Error('User not found');
         }
+        next();
     } catch (error) {
         res.status(401);
         throw new Error('Invalid or expired token');
