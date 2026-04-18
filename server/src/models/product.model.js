@@ -26,7 +26,7 @@ const productSchema = new mongoose.Schema({
         minlength: 3,
         maxlength: [120, "Product name cannot exceed 120 characters"],
     },
-    slug: { type: String, required: true, lowercase: true },
+    slug: { type: String,  lowercase: true },
     description: {
         type: String,
         required: [true, "Product description is required"],
@@ -87,14 +87,17 @@ productSchema.virtual('discount').get(function() {
     }
 });
 
-// ─── Auto-slug ────────────────────────────────────────────────────────
-productSchema.pre('save', function(next){
+// ─── Auto-slug (Modern Way - No 'next' Needed) ───────────────────────
+productSchema.pre('save', async function() {
+    // Agar name change hua hai, tabhi slug generate karo
     if (this.isModified('name')) {
-        this.slug = this.name.toLowerCase()
-            .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric chars with hyphens
-            .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
+        this.slug = this.name
+            .toLowerCase()
+            .trim()
+            .replace(/[^\w\s-]/g, '') // Special characters hatao
+            .replace(/[\s_-]+/g, '-')  // Space aur underscore ko hyphen (-) banao
+            .replace(/^-+|-+$/g, '');  // Shuru aur aakhir ke hyphen hatao
     }
-    next();
 });
 
 // ─── Update Rating ────────────────────────────────────────────────────
