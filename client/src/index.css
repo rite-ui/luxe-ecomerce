@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  
+  --color-gold-50: #FAF7EF;
+  --color-gold-100: #F3EBD0;
+  --color-gold-200: #E6D5A1;
+  --color-gold-300: #D8BD71;
+  --color-gold-400: #CBA643;
+  --color-gold-500: #D4AF37; /* Primary Luxe Gold */
+  --color-gold-600: #C5A059; /* Accent Gold */
+  --color-gold-700: #8C6F3B;
+  --color-gold-800: #5C4927;
+  --color-gold-900: #2D2313;
+  
+  --color-luxury-black: #0B0B0B;
+  --color-luxury-charcoal: #151515;
+  --color-luxury-gray: #1F1F1F;
+  --color-luxury-light-gray: #7F7F7F;
+  --color-luxury-cream: #FAF9F6;
+  --color-luxury-offwhite: #F4F4F0;
+  --color-luxury-sand: #EAE6DF;
+}
+
+@layer base {
+  :root {
+    --bg-primary: #FAF9F6;
+    --bg-secondary: #F4F4F0;
+    --bg-tertiary: #EAE6DF;
+    --text-primary: #0B0B0B;
+    --text-secondary: #4A4A4A;
+    --text-tertiary: #7F7F7F;
+    --border-color: #E2E2E2;
+    --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+    
+    font-family: var(--font-sans);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+
+  /* When dark class is on documentElement */
+  :root.dark {
+    --bg-primary: #080808;
+    --bg-secondary: #121212;
+    --bg-tertiary: #1E1E1E;
+    --text-primary: #F4F4F0;
+    --text-secondary: #CFCFCF;
+    --text-tertiary: #8C8C8C;
+    --border-color: #262626;
+    --card-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    overflow-x: hidden;
+    margin: 0;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-serif);
+    letter-spacing: -0.02em;
+  }
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-tertiary);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gold-500);
+}
+
+/* Luxury button utilities */
+.btn-luxe-primary {
+  background-color: var(--text-primary);
+  color: var(--bg-primary);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  padding: 0.75rem 2rem;
+  border: 1px solid var(--text-primary);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-luxe-primary:hover {
+  background-color: transparent;
+  color: var(--text-primary);
+}
+
+.btn-luxe-secondary {
+  background-color: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  padding: 0.75rem 2rem;
+  border: 1px solid var(--text-primary);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-luxe-secondary:hover {
+  background-color: var(--text-primary);
+  color: var(--bg-primary);
+}
+
+.btn-luxe-gold {
+  background-color: #D4AF37;
+  color: #080808;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  padding: 0.75rem 2rem;
+  border: 1px solid #D4AF37;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-luxe-gold:hover {
+  background-color: transparent;
+  color: #D4AF37;
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dark .glass {
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.02);
+}

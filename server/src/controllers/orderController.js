@@ -36,7 +36,7 @@ export const createOrder = asyncHandler(async (req, res) => {
   const order = await Order.create({
     user: req.user._id,
     items: orderItems,
-    shippingAddress,
+    shipping: shippingAddress,
     paymentMethod,
     notes,
     itemsPrice,
