@@ -35,7 +35,12 @@ const ProductCard = ({ product }) => {
     addToCart(product, 1);
   };
 
-  const mainImage = product.images?.[0]?.url || 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=600&auto=format&fit=crop';
+  const fallbackImage = product.category === 'fragrance'
+    ? '/images/fragrance-placeholder.svg'
+    : product.category === 'fashion'
+      ? '/images/fashion-placeholder.svg'
+      : 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=600&auto=format&fit=crop';
+  const mainImage = product.images?.[0]?.url || fallbackImage;
   const displayPrice = product.price || 0;
   const originalPrice = product.comparePrice || 0;
   const ratingVal = product.rating || 0;
@@ -49,6 +54,10 @@ const ProductCard = ({ product }) => {
           <img
             src={mainImage}
             alt={product.name}
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = fallbackImage;
+            }}
             className="h-full w-full object-cover object-center scale-100 group-hover:scale-[1.04] transition-all duration-500"
             loading="lazy"
           />
@@ -61,7 +70,7 @@ const ProductCard = ({ product }) => {
               New
             </span>
           )}
-          {product.isBestseller && (
+          {(product.isBestSeller || product.isBestseller) && (
             <span className="bg-[#D4AF37] text-black text-[9px] uppercase tracking-widest font-semibold px-2 py-0.5">
               Bestseller
             </span>

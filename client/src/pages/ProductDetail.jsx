@@ -98,9 +98,15 @@ const ProductDetail = () => {
     addToCart(product, qty, selectedVariant);
   };
 
+  const fallbackImage = product.category === 'fragrance'
+    ? '/images/fragrance-placeholder.svg'
+    : product.category === 'fashion'
+      ? '/images/fashion-placeholder.svg'
+      : 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=600&auto=format&fit=crop';
+
   const imagesList = product.images?.length > 0
-    ? product.images
-    : [{ url: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=600&auto=format&fit=crop', alt: product.name }];
+    ? product.images.map((img) => ({ ...img, url: img.url || fallbackImage }))
+    : [{ url: fallbackImage, alt: product.name }];
 
   const currentPrice = product.price || 0;
   const originalPrice = product.comparePrice || 0;
@@ -129,6 +135,10 @@ const ProductDetail = () => {
             <img
               src={imagesList[selectedImage]?.url}
               alt={imagesList[selectedImage]?.alt || product.name}
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = fallbackImage;
+              }}
               className="h-full w-full object-cover object-center transition-all duration-300"
             />
           </div>
@@ -142,7 +152,15 @@ const ProductDetail = () => {
                     selectedImage === idx ? 'border-[var(--text-primary)]' : 'border-[var(--border-color)] hover:border-[var(--text-primary)]'
                   }`}
                 >
-                  <img src={img.url} alt="" className="h-full w-full object-cover" />
+                  <img
+                    src={img.url}
+                    alt=""
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = fallbackImage;
+                    }}
+                    className="h-full w-full object-cover"
+                  />
                 </button>
               ))}
             </div>

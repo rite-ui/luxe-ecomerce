@@ -66,7 +66,8 @@ const productSchema = new mongoose.Schema({
 
     isFeatured: { type: Boolean, default: false },
     isNew : { type: Boolean, default: false },
-    isBestseller : { type: Boolean, default: false },
+    isBestSeller: { type: Boolean, default: false },
+    isBestseller: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true },
 
 

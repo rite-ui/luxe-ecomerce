@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import api, { getErrorMessage } from '../services/api';
 import { Star, Trash2, ShieldAlert } from 'lucide-react';

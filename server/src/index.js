@@ -70,6 +70,15 @@ app.use('/api/payments', paymentRoutes);
 app.use('/api/reviews',  reviewRoutes);
 app.use('/api/admin',    adminRoutes);
 
+// ─── Production Frontend Hosting ────────────────────────────────────
+const clientDistPath = path.join(__dirname, '../../client/dist');
+if (process.env.NODE_ENV === 'production' && await import('fs').then(fs => fs.existsSync(clientDistPath))) {
+  app.use(express.static(clientDistPath));
+  app.get('*', (_req, res) => {
+    res.sendFile(path.join(clientDistPath, 'index.html'));
+  });
+}
+
 // ─── Health Check ─────────────────────────────────────────────────────
 app.get('/api/health', (_req, res) =>
   res.json({ success: true, message: '🚀 LUXE API running', env: process.env.NODE_ENV })

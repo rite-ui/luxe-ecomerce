@@ -1,9 +1,8 @@
-import mongoose from 'mongoose';
 import 'dotenv/config';
-import { connectDB } from './config/db.js'; 
-import User from '../models/user.model.js';         
-import Product from '../models/product.model.js';
-import Order from '../models/order.model.js';
+import { connectDB } from './db.js';
+import User from '../models/user.model.js';
+import { Product } from '../models/product.model.js';
+import { Order } from '../models/order.model.js';
 
 // --- SEED DATA ---
 const users = [
@@ -37,7 +36,7 @@ const products = [
     name: 'Soleil 18K Gold Bracelet',
     description: 'Handcrafted 18-karat gold bracelet featuring sun-inspired motifs. Polished to a mirror finish.',
     shortDescription: '18K gold sun-motif handcrafted bracelet.',
-    price: 420, category: 'jewellery', brand: 'LUXE Joaillerie',
+    price: 420, category: 'jwellery', brand: 'LUXE Joaillerie',
     tags: ['gold', 'bracelet', 'handcrafted', 'bestseller'],
     images: [{ url: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&q=80', alt: 'Gold Bracelet' }],
     stock: 15, rating: 4.8, numReviews: 198, isFeatured: true, isBestSeller: true,
@@ -73,7 +72,7 @@ const products = [
     name: 'Crystal Drop Earrings',
     description: 'Swarovski crystal drop earrings set in sterling silver with 18K gold plating.',
     shortDescription: 'Swarovski crystal & 18K gold plated sterling silver.',
-    price: 185, comparePrice: 250, category: 'jewellery', brand: 'LUXE Joaillerie',
+    price: 185, comparePrice: 250, category: 'jwellery', brand: 'LUXE Joaillerie',
     tags: ['earrings', 'crystal', 'swarovski', 'sale'],
     images: [{ url: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800&q=80', alt: 'Crystal Earrings' }],
     stock: 30, rating: 4.6, numReviews: 143, isFeatured: true,
@@ -100,7 +99,7 @@ const products = [
     name: 'Soleil 22K Gold Statement Cuff',
     description: 'Bold statement cuff in hammered 22-karat gold. Ancient Egyptian inspired.',
     shortDescription: '22K hammered gold heirloom statement cuff.',
-    price: 750, category: 'jewellery', brand: 'LUXE Joaillerie',
+    price: 750, category: 'jwellery', brand: 'LUXE Joaillerie',
     tags: ['gold', 'cuff', 'statement', 'limited'],
     images: [{ url: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=800&q=80', alt: 'Gold Cuff' }],
     stock: 5, rating: 5.0, numReviews: 62, isBestSeller: true, isFeatured: true,

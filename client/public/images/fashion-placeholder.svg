@@ -1,0 +1,9 @@
+<svg width="800" height="1000" viewBox="0 0 800 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="1000" fill="#F3EFE8"/>
+  <rect x="120" y="110" width="560" height="780" rx="36" fill="#E8D8C3"/>
+  <rect x="170" y="180" width="460" height="620" rx="24" fill="#D6B58A"/>
+  <path d="M310 360C310 300 356 250 420 250C484 250 530 300 530 360V520H310V360Z" fill="#5A3C2A"/>
+  <rect x="250" y="520" width="300" height="180" rx="20" fill="#7A4D2E"/>
+  <text x="400" y="780" text-anchor="middle" font-family="Georgia, serif" font-size="38" fill="#5A3C2A">Fashion Edit</text>
+  <text x="400" y="830" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#7A4D2E">Curated Luxury Pieces</text>
+</svg>

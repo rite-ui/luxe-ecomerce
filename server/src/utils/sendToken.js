@@ -11,11 +11,15 @@ export const  sendToken = (user, statusCode, res) => {
     success: true,
     token,
     user: {
-      _id:    user._id,
-      name:   user.name,
-      email:  user.email,
-      role:   user.role,
-      avatar: user.avatar,
+      _id:       user._id,
+      name:      user.name,
+      email:     user.email,
+      role:      user.role,
+      avatar:    user.avatar,
+      phone:     user.phone || '',
+      address:   user.address || [],
+      wishlist:  user.wishlist || [],
+      createdAt: user.createdAt,
     },
     });
 }
