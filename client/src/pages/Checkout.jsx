@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
 import api, { getErrorMessage } from '../services/api';
-import { ShieldAlert, CreditCard, ShoppingBag, Truck, CheckCircle } from 'lucide-react';
+import { ShieldAlert, CreditCard, Truck, CheckCircle } from 'lucide-react';
 
 const Checkout = () => {
   const { cartItems, subtotal, shippingFee, taxFee, total, clearCart } = useCart();
@@ -35,6 +35,7 @@ const Checkout = () => {
 
   // Load Razorpay script dynamically
   const loadRazorpayScript = () => {
+    if (window.Razorpay) return Promise.resolve(true);
     return new Promise((resolve) => {
       const script = document.createElement('script');
       script.src = 'https://checkout.razorpay.com/v1/checkout.js';
@@ -96,10 +97,13 @@ const Checkout = () => {
         // Get Razorpay Key Config
         const configResponse = await api.get('/payments/config');
         const keyId = configResponse.data.keyId;
+        if (!keyId) {
+          throw new Error('Razorpay is not configured. Please contact the store administrator.');
+        }
 
         // Create Razorpay Order
         const rzpOrderResponse = await api.post('/payments/order', {
-          amount: orderData.totalPrice,
+          orderId: orderData._id,
         });
         const rzpOrder = rzpOrderResponse.data.order;
 
@@ -116,9 +120,9 @@ const Checkout = () => {
               setLoading(true);
               // Confirm payment on backend
               const payPayload = {
-                id: response.razorpay_payment_id,
-                status: 'success',
-                updateAt: Date.now().toString(),
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
                 email: user.email,
               };
               await api.put(`/orders/${orderData._id}/pay`, payPayload);

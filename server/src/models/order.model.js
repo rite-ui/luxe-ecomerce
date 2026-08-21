@@ -42,7 +42,14 @@ const orderSchema = new mongoose.Schema({
         lowercase: true,
         required: true
     },
-    paymentResult: { id: String, status: String, updateAt: String, email: String },
+        paymentResult: {
+            id: String,
+            razorpayOrderId: String,
+            signature: String,
+            status: String,
+            updateAt: String,
+            email: String,
+        },
 
     itemsPrice:    { type: Number, required: true, default: 0 },
     shippingPrice: { type: Number, required: true, default: 0 },

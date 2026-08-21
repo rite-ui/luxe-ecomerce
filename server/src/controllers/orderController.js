@@ -1,4 +1,5 @@
 import asyncHandler from 'express-async-handler';
+import crypto from 'crypto';
 import {Order}   from '../models/order.model.js';
 import {Product} from '../models/product.model.js';
 
@@ -77,11 +78,41 @@ export const getOrder = asyncHandler(async (req, res) => {
 export const payOrder = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id);
   if (!order) { res.status(404); throw new Error('Order not found'); }
+  if (order.user.toString() !== req.user._id.toString()) {
+    res.status(403); throw new Error('Not authorised');
+  }
+  if (order.isPaid) { res.status(400); throw new Error('Order is already paid'); }
+
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+  if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+    res.status(400); throw new Error('Incomplete Razorpay payment response');
+  }
+  if (order.paymentResult?.razorpayOrderId !== razorpay_order_id) {
+    res.status(400); throw new Error('Razorpay order does not match this order');
+  }
+
+  const expectedSignature = crypto
+    .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+    .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+    .digest('hex');
+  const signaturesMatch = expectedSignature.length === razorpay_signature.length &&
+    crypto.timingSafeEqual(Buffer.from(expectedSignature), Buffer.from(razorpay_signature));
+  if (!signaturesMatch) {
+    res.status(400); throw new Error('Invalid Razorpay payment signature');
+  }
 
   order.isPaid         = true;
   order.paidAt         = Date.now();
   order.status         = 'processing';
-  order.paymentResult  = req.body;
+  order.paymentResult  = {
+    ...(order.paymentResult?.toObject?.() || {}),
+    id: razorpay_payment_id,
+    razorpayOrderId: razorpay_order_id,
+    signature: razorpay_signature,
+    status: 'success',
+    updateAt: new Date().toISOString(),
+    email: req.body.email,
+  };
   order.statusHistory.push({ status: 'processing', note: 'Payment confirmed' });
 
   await order.save();
